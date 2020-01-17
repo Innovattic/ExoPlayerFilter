@@ -1,6 +1,7 @@
 package com.daasuu.epf.filter;
 
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.opengl.GLES20;
 
 import java.util.HashMap;
@@ -132,6 +133,16 @@ public class GlFilter {
 
     public float getVideoAspect(float originalVideoAspect) {
         return originalVideoAspect;
+    }
+
+    /**
+     * Adjust the video size to this filter
+     * @param intrinsicVideoSize the intrinsic size of the video
+     * @param adjustedVideoSizeResult a holder for the result of this call. The adjusted size is held in here
+     */
+    public void adjustVideoSize(Point intrinsicVideoSize, Point adjustedVideoSizeResult) {
+        adjustedVideoSizeResult.x = intrinsicVideoSize.x;
+        adjustedVideoSizeResult.y = intrinsicVideoSize.y;
     }
 
     protected void onDraw() {

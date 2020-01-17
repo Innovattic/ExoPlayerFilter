@@ -1,5 +1,7 @@
 package com.daasuu.epf.filter;
 
+import android.graphics.Point;
+
 /**
  * Also known as Luma Matte.
  * Used for videos which comprise half of content, and half of alpha-mask / luma-matte.
@@ -53,6 +55,18 @@ public class AlphaFrameFilter extends GlFilter {
             factor = 1f / 2f;
         }
         return originalVideoAspect * factor;
+    }
+
+    @Override
+    public void adjustVideoSize(Point intrinsicVideoSize, Point adjustedVideoSizeResult) {
+        adjustedVideoSizeResult.x = intrinsicVideoSize.x;
+        adjustedVideoSizeResult.y = intrinsicVideoSize.y;
+
+        if (alphaMaskPosition == AlphaMaskPosition.TOP || alphaMaskPosition == AlphaMaskPosition.BOTTOM) {
+            adjustedVideoSizeResult.y = intrinsicVideoSize.y / 2;
+        } else {
+            adjustedVideoSizeResult.x = intrinsicVideoSize.x / 2;
+        }
     }
 
     private static String getVertexShader(AlphaMaskPosition alphaMaskPosition) {
