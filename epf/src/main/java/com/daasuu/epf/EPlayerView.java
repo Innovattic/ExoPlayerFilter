@@ -9,6 +9,8 @@ import android.util.AttributeSet;
 import com.daasuu.epf.chooser.EConfigChooser;
 import com.daasuu.epf.contextfactory.EContextFactory;
 import com.daasuu.epf.filter.GlFilter;
+import com.daasuu.epf.playerviewscale.PlayerViewScaleNone;
+import com.daasuu.epf.playerviewscale.PlayerViewScaleType;
 import com.daasuu.epf.videoscale.VideoScaleNone;
 import com.daasuu.epf.videoscale.VideoScaleType;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -38,8 +40,7 @@ public class EPlayerView extends GLSurfaceView implements VideoListener {
 
     private GlFilter glFilter = null;
 
-    private PlayerScaleType playerScaleType = PlayerScaleType.RESIZE_FIT_WIDTH;
-
+    private PlayerViewScaleType playerViewScaleType = new PlayerViewScaleNone();
     private VideoScaleType videoScaleType = new VideoScaleNone();
 
     public EPlayerView(Context context) {
@@ -79,8 +80,8 @@ public class EPlayerView extends GLSurfaceView implements VideoListener {
         requestLayout();
     }
 
-    public void setPlayerScaleType(PlayerScaleType playerScaleType) {
-        this.playerScaleType = playerScaleType;
+    public void setPlayerViewScaleType(PlayerViewScaleType playerViewScaleType) {
+        this.playerViewScaleType = playerViewScaleType;
         requestLayout();
     }
 
@@ -92,26 +93,8 @@ public class EPlayerView extends GLSurfaceView implements VideoListener {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        int measuredWidth = getMeasuredWidth();
-        int measuredHeight = getMeasuredHeight();
-
-        int viewWidth = measuredWidth;
-        int viewHeight = measuredHeight;
-
-        switch (playerScaleType) {
-            case RESIZE_FIT_WIDTH:
-                viewHeight = (int) (measuredWidth / adjustedVideoAspect);
-                break;
-            case RESIZE_FIT_HEIGHT:
-                viewWidth = (int) (measuredHeight * adjustedVideoAspect);
-                break;
-        }
-
-        // Log.d(TAG, "onMeasure viewWidth = " + viewWidth + " viewHeight = " + viewHeight);
-
-        setMeasuredDimension(viewWidth, viewHeight);
-
+        Point requestedSize = playerViewScaleType.requestViewSize(getMeasuredWidth(), getMeasuredHeight(), adjustedVideoAspect);
+        setMeasuredDimension(requestedSize.x, requestedSize.y);
     }
 
     @Override
@@ -128,7 +111,6 @@ public class EPlayerView extends GLSurfaceView implements VideoListener {
 
     //////////////////////////////////////////////////////////////////////////
     // SimpleExoPlayer.VideoListener
-
 
 
     @Override
