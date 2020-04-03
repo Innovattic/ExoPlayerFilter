@@ -142,7 +142,9 @@ public class EPlayerView extends GLSurfaceView implements VideoListener {
     private void updateIntrinsicVideoSize(int width, int height) {
         intrinsicVideoSize.x = width;
         intrinsicVideoSize.y = height;
-        glFilter.adjustVideoSize(intrinsicVideoSize, adjustedVideoSize);
+        if(glFilter != null) {
+            glFilter.adjustVideoSize(intrinsicVideoSize, adjustedVideoSize);
+        }
     }
 
     private void applyVideoScaleType() {
