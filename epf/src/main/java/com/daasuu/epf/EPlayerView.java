@@ -85,6 +85,7 @@ public class EPlayerView extends GLSurfaceView implements VideoListener {
         requestLayout();
     }
 
+    /** Only works if a GlFilter is set, otherwise videoScaleType is ignored */
     public void setVideoScaleType(VideoScaleType videoScaleType) {
         this.videoScaleType = videoScaleType;
         applyVideoScaleType();
