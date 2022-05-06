@@ -1,24 +1,26 @@
 package com.daasuu.epf;
 
-import android.graphics.SurfaceTexture;
-import android.opengl.GLES20;
-import android.opengl.Matrix;
-import android.util.Log;
-import android.view.Surface;
-
-import com.daasuu.epf.filter.GlFilter;
-import com.daasuu.epf.filter.GlLookUpTableFilter;
-import com.daasuu.epf.filter.GlPreviewFilter;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-
-import javax.microedition.khronos.egl.EGLConfig;
-
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_LINEAR;
 import static android.opengl.GLES20.GL_MAX_TEXTURE_SIZE;
 import static android.opengl.GLES20.GL_NEAREST;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
 import static android.opengl.GLES20.glViewport;
+
+import android.graphics.SurfaceTexture;
+import android.opengl.GLES20;
+import android.opengl.Matrix;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import android.view.Surface;
+
+import com.daasuu.epf.filter.GlFilter;
+import com.daasuu.epf.filter.GlLookUpTableFilter;
+import com.daasuu.epf.filter.GlPreviewFilter;
+import com.google.android.exoplayer2.ExoPlayer;
+
+import javax.microedition.khronos.egl.EGLConfig;
 
 /**
  * Created by sudamasayuki on 2017/05/16.
@@ -49,7 +51,7 @@ class EPlayerRenderer extends EFrameBufferObjectRenderer implements SurfaceTextu
 
     private float aspectRatio = 1f;
 
-    private SimpleExoPlayer simpleExoPlayer;
+    private ExoPlayer exoPlayer;
 
     EPlayerRenderer(EPlayerView glPreview) {
         super();
@@ -99,8 +101,14 @@ class EPlayerRenderer extends EFrameBufferObjectRenderer implements SurfaceTextu
         previewFilter = new GlPreviewFilter(previewTexture.getTextureTarget());
         previewFilter.setup();
 
-        Surface surface = new Surface(previewTexture.getSurfaceTexture());
-        this.simpleExoPlayer.setVideoSurface(surface);
+        final Surface surface = new Surface(previewTexture.getSurfaceTexture());
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                exoPlayer.setVideoSurface(surface);
+            }
+        });
 
         Matrix.setLookAtM(VMatrix, 0,
                 0.0f, 0.0f, 5.0f,
@@ -180,8 +188,8 @@ class EPlayerRenderer extends EFrameBufferObjectRenderer implements SurfaceTextu
         glPreview.requestRender();
     }
 
-    void setSimpleExoPlayer(SimpleExoPlayer simpleExoPlayer) {
-        this.simpleExoPlayer = simpleExoPlayer;
+    void setExoPlayer(ExoPlayer exoPlayer) {
+        this.exoPlayer = exoPlayer;
     }
 
     void release() {
