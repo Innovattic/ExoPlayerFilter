@@ -102,13 +102,7 @@ class EPlayerRenderer extends EFrameBufferObjectRenderer implements SurfaceTextu
         previewFilter.setup();
 
         final Surface surface = new Surface(previewTexture.getSurfaceTexture());
-
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                exoPlayer.setVideoSurface(surface);
-            }
-        });
+        setVideoSurface(surface);
 
         Matrix.setLookAtM(VMatrix, 0,
                 0.0f, 0.0f, 5.0f,
@@ -126,6 +120,15 @@ class EPlayerRenderer extends EFrameBufferObjectRenderer implements SurfaceTextu
 
         GLES20.glGetIntegerv(GL_MAX_TEXTURE_SIZE, args, 0);
 
+    }
+
+    private void setVideoSurface(Surface surface) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                exoPlayer.setVideoSurface(surface);
+            }
+        });
     }
 
     @Override
