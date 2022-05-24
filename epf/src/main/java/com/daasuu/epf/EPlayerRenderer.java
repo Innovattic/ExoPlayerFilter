@@ -123,12 +123,7 @@ class EPlayerRenderer extends EFrameBufferObjectRenderer implements SurfaceTextu
     }
 
     private void setVideoSurface(Surface surface) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                exoPlayer.setVideoSurface(surface);
-            }
-        });
+        new Handler(Looper.getMainLooper()).post(() -> exoPlayer.setVideoSurface(surface));
     }
 
     @Override
