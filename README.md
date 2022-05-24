@@ -69,6 +69,8 @@ Custom filters can be created by inheriting [GlFilter.java](https://github.com/M
 
 
 ## ChangeLog
+### 0.4.3 :
+- Update the readme
 ### 0.4.2 :
 - Update ExoPlayer to 2.17.1
 ### 0.4.1 :
