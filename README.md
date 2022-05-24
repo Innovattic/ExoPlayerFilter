@@ -20,7 +20,7 @@ Step 2. Add the dependency
 ```groovy
     dependencies {
         implementation 'com.github.MasayukiSuda:ExoPlayerFilter:v0.2.4'
-        implementation 'com.google.android.exoplayer:exoplayer-core:2.17.1'
+        implementation 'com.google.android.exoplayer:exoplayer-core:2.10.2'
     }
 ```
 This library depends ExoPlayer core 2.10.2
@@ -67,6 +67,10 @@ Custom filters can be created by inheriting [GlFilter.java](https://github.com/M
     ePlayerView.setGlFilter(new GlSepiaFilter());
 ```
 
+
+## ChangeLog
+### 0.2.4 :
+Update ExoPlayer to 2.17.1
 
 ## Special Thanks to
 * [android-gpuimage](https://github.com/CyberAgent/android-gpuimage)
