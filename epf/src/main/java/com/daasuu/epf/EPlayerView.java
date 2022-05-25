@@ -1,5 +1,7 @@
 package com.daasuu.epf;
 
+import static com.daasuu.epf.chooser.EConfigChooser.EGL_CONTEXT_CLIENT_VERSION;
+
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -13,20 +15,19 @@ import com.daasuu.epf.playerviewscale.PlayerViewScaleNone;
 import com.daasuu.epf.playerviewscale.PlayerViewScaleType;
 import com.daasuu.epf.videoscale.VideoScaleNone;
 import com.daasuu.epf.videoscale.VideoScaleType;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.video.VideoListener;
-
-import static com.daasuu.epf.chooser.EConfigChooser.EGL_CONTEXT_CLIENT_VERSION;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.video.VideoSize;
 
 /**
  * Created by sudamasayuki on 2017/05/16.
  */
-public class EPlayerView extends GLSurfaceView implements VideoListener {
+public class EPlayerView extends GLSurfaceView implements Player.Listener {
 
     private final static String TAG = EPlayerView.class.getSimpleName();
 
     private final EPlayerRenderer renderer;
-    private SimpleExoPlayer player;
+    private ExoPlayer player;
 
     /* Video Aspect according to the video */
     private float measuredVideoAspect = 1f;
@@ -60,14 +61,14 @@ public class EPlayerView extends GLSurfaceView implements VideoListener {
         setRenderer(renderer);
     }
 
-    public EPlayerView setSimpleExoPlayer(SimpleExoPlayer player) {
+    public EPlayerView setExoPlayer(ExoPlayer player) {
         if (this.player != null) {
             this.player.release();
             this.player = null;
         }
         this.player = player;
-        this.player.addVideoListener(this);
-        this.renderer.setSimpleExoPlayer(player);
+        this.player.addListener(this);
+        this.renderer.setExoPlayer(player);
         return this;
     }
 
@@ -115,11 +116,12 @@ public class EPlayerView extends GLSurfaceView implements VideoListener {
 
 
     @Override
-    public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-        // Log.d(TAG, "width = " + width + " height = " + height + " unappliedRotationDegrees = " + unappliedRotationDegrees + " pixelWidthHeightRatio = " + pixelWidthHeightRatio);
-        updateIntrinsicVideoSize(width, height);
+    public void onVideoSizeChanged(VideoSize videoSize) {
 
-        measuredVideoAspect = ((float) width / height) * pixelWidthHeightRatio;
+        // Log.d(TAG, "width = " + width + " height = " + height + " unappliedRotationDegrees = " + unappliedRotationDegrees + " pixelWidthHeightRatio = " + pixelWidthHeightRatio);
+        updateIntrinsicVideoSize(videoSize.width, videoSize.height);
+
+        measuredVideoAspect = ((float) videoSize.width / videoSize.height) * videoSize.pixelWidthHeightRatio;
         adjustedVideoAspect = calculateAdjustedVideoAspect();
         // Log.d(TAG, "measuredVideoAspect = " + measuredVideoAspect);
 
@@ -143,7 +145,7 @@ public class EPlayerView extends GLSurfaceView implements VideoListener {
     private void updateIntrinsicVideoSize(int width, int height) {
         intrinsicVideoSize.x = width;
         intrinsicVideoSize.y = height;
-        if(glFilter != null) {
+        if (glFilter != null) {
             glFilter.adjustVideoSize(intrinsicVideoSize, adjustedVideoSize);
         }
     }

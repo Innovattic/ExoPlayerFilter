@@ -3,7 +3,7 @@
 <img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat">
 [![API](https://img.shields.io/badge/API-16%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=16)
 
-This library uses OpenGL Shaders to apply effects on [ExoPlayer](https://github.com/google/ExoPlayer) video at Runtime and <br> depends EXOPlayer core 2.10.2.<br>
+This library uses OpenGL Shaders to apply effects on [ExoPlayer](https://github.com/google/ExoPlayer) video at Runtime and <br> depends EXOPlayer core 2.17.1<br>
 <img src="art/art.gif" width="33.33%">
 
 ## Gradle
@@ -19,11 +19,11 @@ allprojects {
 Step 2. Add the dependency
 ```groovy
     dependencies {
-        implementation 'com.github.MasayukiSuda:ExoPlayerFilter:v0.2.4'
-        implementation 'com.google.android.exoplayer:exoplayer-core:2.10.2'
+        implementation 'com.github.Innovattic:ExoPlayerFilter:v0.4.3'
+        implementation 'com.google.android.exoplayer:exoplayer-core:2.17.1'
     }
 ```
-This library depends ExoPlayer core 2.10.2
+This library depends ExoPlayer core 2.17.1
 
 ## Sample Usage
 
@@ -54,7 +54,7 @@ Create [EPlayerView](https://github.com/MasayukiSuda/ExpPlayerFilter/blob/master
 ```JAVA
     ePlayerView = new EPlayerView(this);
     // set SimpleExoPlayer
-    ePlayerView.setSimpleExoPlayer(player);
+    ePlayerView.setExoPlayer(player);
     ePlayerView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     // add ePlayerView to WrapperView
     ((MovieWrapperView) findViewById(R.id.layout_movie_wrapper)).addView(ePlayerView);
@@ -67,6 +67,24 @@ Custom filters can be created by inheriting [GlFilter.java](https://github.com/M
     ePlayerView.setGlFilter(new GlSepiaFilter());
 ```
 
+
+## ChangeLog
+### 0.4.3 :
+- Update the readme
+### 0.4.2 :
+- Update ExoPlayer to 2.17.1
+### 0.4.1 :
+- Add Alpha-mask filter
+### 0.4.0 :
+- Add EPlayerTranslucentView
+### 0.3.1 :
+- Add Video Scale Type
+- Fix adjusted video aspect when video size changes
+### 0.3.0 :
+- Refactor PlayerScaleType to PlayerViewScaleType, which is now an interface.
+- Add option for player to fit both height and width
+### 0.2.5 :
+- Fix NPE when no glFilter set
 
 ## Special Thanks to
 * [android-gpuimage](https://github.com/CyberAgent/android-gpuimage)
